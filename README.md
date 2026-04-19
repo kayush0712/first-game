@@ -1,5 +1,5 @@
 
-# 🎮 My First Game
+# 🎮 2D-Game
 
 A fun, interactive web game built using **Node.js**, **Express**, and **EJS**. It allows users to play seamlessly in their browser with a fast and lightweight backend.
 
