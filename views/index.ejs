@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Ayush's Game Zone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src="/javascripts/first.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #03010a;
+      --surface: #0a0614;
+      --border:  #1a1030;
+      --neon:    #00f5ff;
+      --neon2:   #bf00ff;
+      --neon3:   #ff003c;
+      --text:    #e8e0ff;
+      --muted:   #5a4f7a;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--neon2); border-radius: 3px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 400;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridMove 12s linear infinite;
+      pointer-events: none; z-index: 0;
+    }
+    @keyframes gridMove {
+      from { transform: translateY(0); }
+      to   { transform: translateY(48px); }
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 20% 10%, rgba(191,0,255,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 300px at 80% 80%, rgba(0,245,255,0.07) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .wrap {
+      position: relative; z-index: 1;
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 24px 100px;
+    }
+
+    /* Hero */
+    .hero { text-align: center; padding: 80px 0 64px; animation: fadeUp 0.6s ease both; }
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Orbitron', monospace; font-size: 10px; letter-spacing: 0.35em;
+      color: var(--neon); border: 1px solid rgba(0,245,255,0.3);
+      padding: 5px 16px; border-radius: 2px; margin-bottom: 24px;
+      background: rgba(0,245,255,0.04);
+    }
+    .hero h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2.8rem, 8vw, 6rem); font-weight: 900; line-height: 0.95;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff 0%, var(--neon) 40%, var(--neon2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(0,245,255,0.3)); margin-bottom: 8px;
+    }
+    .glitch { position: relative; display: inline-block; }
+    .glitch::before, .glitch::after {
+      content: attr(data-text); position: absolute; inset: 0;
+      background: linear-gradient(135deg, #fff 0%, var(--neon) 40%, var(--neon2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .glitch::before { animation: glitch1 3.5s infinite; clip-path: polygon(0 20%,100% 20%,100% 40%,0 40%); }
+    .glitch::after  { animation: glitch2 3.5s infinite; clip-path: polygon(0 60%,100% 60%,100% 80%,0 80%); }
+    @keyframes glitch1 {
+      0%,90%,100% { transform:translate(0);opacity:0; }
+      92% { transform:translate(-3px,1px);opacity:0.7; }
+      94% { transform:translate(3px,-1px);opacity:0.7; }
+      96% { transform:translate(0);opacity:0; }
+    }
+    @keyframes glitch2 {
+      0%,90%,100% { transform:translate(0);opacity:0; }
+      93% { transform:translate(3px,2px);opacity:0.6; }
+      95% { transform:translate(-3px,-2px);opacity:0.6; }
+      97% { transform:translate(0);opacity:0; }
+    }
+    .hero-sub { font-size:1.1rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:28px;font-weight:300; }
+
+    .quote-band {
+      border-top:1px solid rgba(0,245,255,0.15); border-bottom:1px solid rgba(0,245,255,0.15);
+      padding:18px 24px; margin-bottom:64px; text-align:center;
+      font-size:0.9rem; color:rgba(0,245,255,0.6); letter-spacing:0.06em;
+      font-style:italic; background:rgba(0,245,255,0.02);
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .about {
+      background:var(--surface); border:1px solid var(--border);
+      border-left:3px solid var(--neon2); border-radius:6px;
+      padding:24px 28px; margin-bottom:64px;
+      font-size:1.05rem; line-height:1.7; color:rgba(232,224,255,0.75);
+      animation: fadeUp 0.6s 0.15s ease both;
+    }
+    .about strong { color:var(--neon); font-weight:600; }
+
+    .section-head { display:flex;align-items:center;gap:16px;margin-bottom:32px;animation:fadeUp 0.6s 0.2s ease both; }
+    .section-head h2 { font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;color:var(--text);white-space:nowrap; }
+    .section-line { flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent); }
+    .section-dot { width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon);animation:pulse 2s infinite;flex-shrink:0; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.7);} }
+
+    /* Game grid */
+    .game-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-bottom:64px; }
+    .game-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:8px; overflow:hidden;
+      transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;
+      animation:fadeUp 0.6s ease both;
+    }
+    .game-card:nth-child(1){animation-delay:0.25s;} .game-card:nth-child(2){animation-delay:0.35s;}
+    .game-card:hover { transform:translateY(-6px);border-color:var(--neon);box-shadow:0 0 30px rgba(0,245,255,0.12),0 20px 40px rgba(0,0,0,0.5); }
+
+    /* Thumb base */
+    .game-thumb { position:relative;overflow:hidden;height:220px; }
+    .game-thumb::after {
+      content:''; position:absolute; inset:0;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px);
+      pointer-events:none; z-index:3;
+    }
+    .game-thumb::before {
+      content:''; position:absolute; top:10px; right:10px;
+      width:20px; height:20px;
+      border-top:2px solid var(--neon); border-right:2px solid var(--neon);
+      z-index:4; opacity:0.7;
+    }
+    .play-overlay { position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,0.45);opacity:0;transition:opacity 0.3s;z-index:5; }
+    .game-card:hover .play-overlay { opacity:1; }
+    .play-btn { width:60px;height:60px;border-radius:50%;border:2px solid var(--neon);background:rgba(0,245,255,0.1);display:grid;place-items:center;font-size:22px;box-shadow:0 0 20px rgba(0,245,255,0.4);backdrop-filter:blur(4px); }
+
+    /* Deadhole: space art */
+    .thumb-deadhole { background:#000510; }
+    .star { position:absolute;border-radius:50%;background:#fff;animation:twinkle 2s infinite alternate; }
+    @keyframes twinkle { from{opacity:0.2;} to{opacity:1;} }
+    .planet {
+      position:absolute; border-radius:50%;
+      background:radial-gradient(circle at 35% 35%,#1a0a3a,#000);
+      border:1px solid rgba(191,0,255,0.5);
+      box-shadow:0 0 30px rgba(191,0,255,0.4),inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    .ship {
+      position:absolute; width:0; height:0;
+      border-left:12px solid transparent; border-right:12px solid transparent;
+      border-bottom:28px solid var(--neon);
+      filter:drop-shadow(0 0 8px var(--neon));
+      animation:shipFloat 3s ease-in-out infinite;
+    }
+    @keyframes shipFloat { 0%,100%{transform:translateY(0) rotate(-8deg);} 50%{transform:translateY(-8px) rotate(-8deg);} }
+    .laser {
+      position:absolute; width:2px; height:30px;
+      background:linear-gradient(to bottom,var(--neon3),transparent);
+      box-shadow:0 0 6px var(--neon3);
+      animation:laserFire 1.2s linear infinite;
+    }
+    @keyframes laserFire { from{transform:translateY(0);opacity:1;} to{transform:translateY(80px);opacity:0;} }
+
+    /* Kakurio: arcade art */
+    .thumb-kakurio { background:#000a05; }
+    .arcade-bg {
+      position:absolute; inset:0;
+      background:radial-gradient(ellipse 200px 200px at 50% 40%,rgba(0,245,100,0.08) 0%,transparent 70%);
+    }
+    .arcade-bg::before {
+      content:''; position:absolute; inset:0;
+      background-image:linear-gradient(rgba(0,245,100,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,100,0.08) 1px,transparent 1px);
+      background-size:30px 30px;
+    }
+    .score-display { position:absolute;top:18px;left:50%;transform:translateX(-50%);font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:0.15em;color:rgba(0,245,100,0.6);z-index:2;text-align:center; }
+    .score-num { font-size:1.6rem;font-weight:900;color:#00f564;text-shadow:0 0 14px #00f564;display:block;margin-top:2px; }
+    .platform { position:absolute;border-radius:4px;animation:blockBob ease-in-out infinite alternate; }
+    @keyframes blockBob { from{transform:translateY(0);} to{transform:translateY(-6px);} }
+    .player-char { position:absolute;width:22px;height:22px;border-radius:4px;background:#00f564;box-shadow:0 0 12px #00f564;animation:playerRun 2s ease-in-out infinite; }
+    @keyframes playerRun { 0%,100%{left:30%;} 50%{left:60%;} }
+
+    /* shared thumb label */
+    .thumb-label {
+      position:absolute; bottom:14px; left:16px;
+      font-family:'Orbitron',monospace; font-size:1.4rem; font-weight:900;
+      color:#fff; letter-spacing:0.1em; z-index:2;
+    }
+
+    /* Card body */
+    .game-body { padding:20px 22px 22px; }
+    .game-name { font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px; }
+    .game-name .accent { color:var(--neon); }
+    .game-desc { font-size:0.82rem;color:var(--muted);letter-spacing:0.05em;margin-bottom:16px;text-transform:uppercase; }
+    .game-link {
+      display:inline-flex;align-items:center;gap:8px;
+      font-family:'Orbitron',monospace;font-size:0.72rem;font-weight:700;
+      letter-spacing:0.15em;text-transform:uppercase;
+      color:var(--bg);background:var(--neon);padding:10px 20px;border-radius:3px;
+      text-decoration:none;transition:background 0.2s,box-shadow 0.2s;
+    }
+    .game-link:hover { background:#fff;box-shadow:0 0 20px rgba(0,245,255,0.5); }
+
+    /* Tech */
+    .tech-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px;animation:fadeUp 0.6s 0.3s ease both; }
+    .tech-card { background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px 20px;display:flex;align-items:center;gap:14px;text-decoration:none;transition:border-color 0.2s,background 0.2s; }
+    .tech-card:hover { border-color:var(--neon2);background:rgba(191,0,255,0.05); }
+    .tech-icon { width:36px;height:36px;border-radius:6px;background:var(--border);display:grid;place-items:center;font-size:16px;flex-shrink:0; }
+    .tech-info { flex:1;min-width:0; }
+    .tech-name { font-family:'Orbitron',monospace;font-size:0.78rem;font-weight:700;color:var(--text);letter-spacing:0.1em;text-transform:uppercase; }
+    .tech-url { font-size:0.72rem;color:var(--muted);margin-top:2px; }
+    .tech-arrow { font-size:12px;color:var(--neon2);flex-shrink:0; }
+
+    footer { text-align:center;padding-top:48px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;animation:fadeUp 0.6s 0.4s ease both; }
+    footer span { color:var(--neon); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <section class="hero">
+    <div class="hero-tag">// Player One Has Entered //</div>
+    <h1><span class="glitch" data-text="AYUSH">AYUSH</span></h1>
+    <p class="hero-sub">Game Developer &nbsp;·&nbsp; Kid-Friendly Studios</p>
+  </section>
+
+  <div class="quote-band">
+    "A little thought and a little kindness are often worth more than a great deal of money." — John Ruskin
+  </div>
+
+  <div class="about">
+    We play games with stunning, realistic graphics — but many aren't built for the youngest players.
+    I build games <strong>designed for children under 3 years old</strong>: safe, playful, easy to pick up,
+    with their own high score to beat. Every mechanic, every visual, crafted with kids in mind.
+  </div>
+
+  <div class="section-head">
+    <span class="section-dot"></span>
+    <h2>Select Your Game</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="game-grid">
+
+    <!-- ── Deadhole ── -->
+    <div class="game-card">
+      <div class="game-thumb thumb-deadhole">
+        <!-- stars -->
+        <div class="star" style="width:2px;height:2px;top:12%;left:15%;animation-delay:0s"></div>
+        <div class="star" style="width:1px;height:1px;top:25%;left:40%;animation-delay:0.3s"></div>
+        <div class="star" style="width:3px;height:3px;top:8%;left:70%;animation-delay:0.7s"></div>
+        <div class="star" style="width:2px;height:2px;top:40%;left:85%;animation-delay:0.2s"></div>
+        <div class="star" style="width:1px;height:1px;top:55%;left:22%;animation-delay:0.9s"></div>
+        <div class="star" style="width:2px;height:2px;top:18%;left:55%;animation-delay:0.5s"></div>
+        <div class="star" style="width:1px;height:1px;top:70%;left:60%;animation-delay:0.4s"></div>
+        <div class="star" style="width:2px;height:2px;top:80%;left:10%;animation-delay:0.6s"></div>
+        <div class="star" style="width:3px;height:3px;top:30%;left:90%;animation-delay:1.1s"></div>
+        <div class="star" style="width:1px;height:1px;top:50%;left:5%;animation-delay:0.8s"></div>
+        <!-- planet -->
+        <div class="planet" style="width:80px;height:80px;top:12%;right:12%"></div>
+        <!-- ship -->
+        <div class="ship" style="left:38%;top:42%"></div>
+        <!-- lasers -->
+        <div class="laser" style="left:40%;top:20%;animation-delay:0s"></div>
+        <div class="laser" style="left:44%;top:20%;animation-delay:0.5s"></div>
+        <!-- label -->
+        <div class="thumb-label" style="text-shadow:0 0 20px var(--neon),0 0 40px var(--neon)">DEADHOLE</div>
+        <div class="play-overlay"><div class="play-btn">▶</div></div>
+      </div>
+      <div class="game-body">
+        <p class="game-name">Dead<span class="accent">hole</span></p>
+        <p class="game-desc">Space Shooter · Quintus Engine</p>
+        <a href="/deadhole" class="game-link">Play Now →</a>
+      </div>
+    </div>
+
+    <!-- ── Kakurio ── -->
+    <div class="game-card">
+      <div class="game-thumb thumb-kakurio">
+        <div class="arcade-bg"></div>
+        <div class="score-display">HIGH SCORE <span class="score-num" id="scoreNum">007340</span></div>
+        <!-- platforms -->
+        <div class="platform" style="width:70px;height:12px;background:#00f564;opacity:0.7;box-shadow:0 0 8px #00f564;bottom:35%;left:8%;animation-duration:2.1s"></div>
+        <div class="platform" style="width:50px;height:12px;background:#00f564;opacity:0.7;box-shadow:0 0 8px #00f564;bottom:52%;left:38%;animation-duration:1.7s"></div>
+        <div class="platform" style="width:65px;height:12px;background:#00f564;opacity:0.7;box-shadow:0 0 8px #00f564;bottom:42%;left:66%;animation-duration:2.4s"></div>
+        <div class="platform" style="width:80px;height:12px;background:#00f564;opacity:0.4;box-shadow:0 0 8px #00f564;bottom:20%;left:20%;animation-duration:1.9s"></div>
+        <!-- player -->
+        <div class="player-char" style="bottom:64%"></div>
+        <!-- label -->
+        <div class="thumb-label" style="color:#00f564;text-shadow:0 0 20px #00f564,0 0 40px #00f564">KAKURIO</div>
+        <div class="play-overlay">
+          <div class="play-btn" style="border-color:#00f564;background:rgba(0,245,100,0.1);box-shadow:0 0 20px rgba(0,245,100,0.4)">▶</div>
+        </div>
+      </div>
+      <div class="game-body">
+        <p class="game-name">Kaku<span class="accent">rio</span></p>
+        <p class="game-desc">High Score Challenge · Phaser 3</p>
+        <a href="/phaser" class="game-link">Play Now →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-head">
+    <span class="section-dot"></span>
+    <h2>Built With</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="tech-grid">
+    <a href="http://www.html5quintus.com/" class="tech-card" target="_blank">
+      <div class="tech-icon">🚀</div>
+      <div class="tech-info">
+        <p class="tech-name">Quintus</p>
+        <p class="tech-url">html5quintus.com</p>
+      </div>
+      <span class="tech-arrow">↗</span>
+    </a>
+    <a href="https://phaser.io/" class="tech-card" target="_blank">
+      <div class="tech-icon">⚡</div>
+      <div class="tech-info">
+        <p class="tech-name">Phaser 3</p>
+        <p class="tech-url">phaser.io</p>
+      </div>
+      <span class="tech-arrow">↗</span>
+    </a>
+  </div>
+
+  <footer>
+    <p>Crafted by <span>Ayush</span> &nbsp;·&nbsp; Kid-Friendly Games Studio</p>
+  </footer>
+
+</div>
+
+<script>
+  // animate score counter for Kakurio
+  const scores = ['001250','003870','007340','012980','018450'];
+  let si = 0;
+  setInterval(() => {
+    si = (si + 1) % scores.length;
+    const el = document.getElementById('scoreNum');
+    if (el) el.textContent = scores[si];
+  }, 1800);
+</script>
+</body>
+</html>
