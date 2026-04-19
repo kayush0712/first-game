@@ -1,0 +1,16 @@
+# Render Blueprint: https://render.com/docs/infrastructure-as-code
+# After pushing, open Render → New → Blueprint → connect this repo.
+
+services:
+  - type: web
+    name: first-game
+    runtime: node
+    plan: free
+    region: oregon
+    branch: master
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
